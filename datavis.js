@@ -1,7 +1,7 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
 const margin = { top: 20, right: 30, bottom: 50, left: 50 };
-const width = 800 - margin.left - margin.right;
+const width = 1200 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
 const svg = d3.select("#chart")
