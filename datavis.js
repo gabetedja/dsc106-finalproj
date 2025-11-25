@@ -61,7 +61,7 @@ const data = Array.from(mergedMap.values());
 
 // ---------- SLIDER + VARIABLE SELECT ----------
 
-const months = [...new Set(data.map(d => d.month))].sort((a, b) => a - b);
+/*const months = [...new Set(data.map(d => d.month))].sort((a, b) => a - b);
 const sliderWidth = 900;
 
 const slider = d3.select("#month")
@@ -90,7 +90,7 @@ labelContainer.selectAll("span")
   .join("span")
   .text(d => new Date(2000, d - 1).toLocaleString("default", { month: "short" }));
 
-/*const tickList = d3.select("#month")
+const tickList = d3.select("#month")
   .append("datalist")
   .attr("id", "monthTicks");
 
