@@ -198,7 +198,7 @@ const monthNames = months.map(m =>
 const sliderScale = d3.scaleLinear()
   .domain([months[0], months[months.length - 1]]) // 1..12
   .range([0, sliderWidth]);
-
+ 
 const tickSvg = monthContainer
   .append("svg")
   .attr("width", sliderWidth)
