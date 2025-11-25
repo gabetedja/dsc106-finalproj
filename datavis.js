@@ -90,7 +90,7 @@ labelContainer.selectAll("span")
   .join("span")
   .text(d => new Date(2000, d - 1).toLocaleString("default", { month: "short" }));
 
-const tickList = d3.select("#month")
+/*const tickList = d3.select("#month")
   .append("datalist")
   .attr("id", "monthTicks");
 
@@ -106,7 +106,30 @@ const label = d3.select("#month")
   .append("div")
   .attr("id", "monthLabel")
   .style("margin-top", "10px")
-  .text(new Date(2000, d3.min(months) - 1).toLocaleString("default", { month: "long" }));
+  .text(new Date(2000, d3.min(months) - 1).toLocaleString("default", { month: "long" }));*/
+const monthNames = months.map(m =>
+  new Date(2000, m - 1).toLocaleString("default", { month: "short" })
+);
+
+// add tick labels under the slider manually
+const sliderScale = d3.scaleLinear()
+  .domain([1, 12])
+  .range([0, sliderWidth]);
+
+const tickSvg = d3.select("#month")
+  .append("svg")
+  .attr("width", sliderWidth)
+  .attr("height", 40);
+
+tickSvg.selectAll("text")
+  .data(monthNames)
+  .join("text")
+  .attr("x", (_, i) => sliderScale(i + 1))
+  .attr("y", 20)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "12px")
+  .attr("fill", "#333")
+  .text(d => d);
 
 // dropdown to switch tas/o3/psl
 let currentVariable = "tas";
