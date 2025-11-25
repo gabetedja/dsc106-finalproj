@@ -163,7 +163,7 @@ slider.on("input", function () {
 const months = d3.range(1, 13);
 
 // width for both the slider and the tick labels
-const sliderWidth = 900;
+const sliderWidth = 1100;
 const sliderPadding = 25;
 // main container for slider + ticks + label
 const monthContainer = d3.select("#month")
