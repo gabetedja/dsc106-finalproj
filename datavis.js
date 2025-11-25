@@ -107,7 +107,7 @@ const label = d3.select("#month")
   .attr("id", "monthLabel")
   .style("margin-top", "10px")
   .text(new Date(2000, d3.min(months) - 1).toLocaleString("default", { month: "long" }));*/
-const monthNames = months.map(m =>
+/*const monthNames = months.map(m =>
   new Date(2000, m - 1).toLocaleString("default", { month: "short" })
 );
 
@@ -159,7 +159,92 @@ slider.on("input", function () {
   label.text(new Date(2000, monthValue - 1).toLocaleString("default", { month: "long" }));
   draw(monthValue);
 });
+*/
+const months = d3.range(1, 13);
 
+// width for both the slider and the tick labels
+const sliderWidth = 900;
+
+// main container for slider + ticks + label
+const monthContainer = d3.select("#month")
+  .style("width", sliderWidth + "px")
+  .style("margin", "0 auto");
+
+// actual slider
+const slider = monthContainer
+  .append("input")
+  .attr("type", "range")
+  .attr("min", d3.min(months))
+  .attr("max", d3.max(months))
+  .attr("step", 1)
+  .attr("value", d3.min(months))
+  .attr("class", "slider")
+  .style("width", "100%")
+  .style("display", "block");
+
+// label under the slider showing full month name
+const label = monthContainer
+  .append("div")
+  .attr("id", "monthLabel")
+  .style("margin-top", "6px")
+  .style("text-align", "left")
+  .text(new Date(2000, months[0] - 1).toLocaleString("default", { month: "long" }));
+
+// SVG row with month abbreviations exactly aligned to slider
+const monthNames = months.map(m =>
+  new Date(2000, m - 1).toLocaleString("default", { month: "short" })
+);
+
+const sliderScale = d3.scaleLinear()
+  .domain([months[0], months[months.length - 1]]) // 1..12
+  .range([0, sliderWidth]);
+
+const tickSvg = monthContainer
+  .append("svg")
+  .attr("width", sliderWidth)
+  .attr("height", 35);
+
+tickSvg.selectAll("text")
+  .data(months)
+  .join("text")
+  .attr("x", d => sliderScale(d))
+  .attr("y", 20)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "12px")
+  .attr("fill", "#333")
+  .text(d => monthNames[d - 1]);
+
+// dropdown to switch tas/o3/psl
+let currentVariable = "tas";
+
+const variableSelect = monthContainer
+  .append("select")
+  .attr("id", "variableSelect")
+  .style("margin-top", "10px")
+  .on("change", function () {
+    currentVariable = this.value;
+    const monthValue = +slider.property("value");
+    draw(monthValue);
+  });
+
+variableSelect.selectAll("option")
+  .data([
+    { value: "tas", label: "Surface Temperature (tas)" },
+    { value: "o3", label: "Ozone (o3)" },
+    { value: "psl", label: "Sea Level Pressure (psl)" }
+  ])
+  .join("option")
+  .attr("value", d => d.value)
+  .text(d => d.label);
+
+// slider interaction
+slider.on("input", function () {
+  const monthValue = +this.value;
+  label.text(
+    new Date(2000, monthValue - 1).toLocaleString("default", { month: "long" })
+  );
+  draw(monthValue);
+});
 // ---------- SCALES & AXES ----------
 
 const xScale = d3.scaleLinear().domain([-90, 90]).range([0, width]);
