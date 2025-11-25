@@ -179,8 +179,10 @@ const slider = monthContainer
   .attr("step", 1)
   .attr("value", d3.min(months))
   .attr("class", "slider")
-  .style("width", "100%")
-  .style("display", "block");
+  .style("width", (sliderWidth - 2 * sidePadding) + "px")
+  .style("display", "block")
+  .style("margin-left", sidePadding + "px")
+  .style("margin-right", sidePadding + "px");
 
 // label under the slider showing full month name
 const label = monthContainer
@@ -197,7 +199,7 @@ const monthNames = months.map(m =>
 
 const sliderScale = d3.scaleLinear()
   .domain([months[0], months[months.length - 1]]) // 1..12
-  .range([0, sliderWidth]);
+  .range([sliderPadding, sliderWidth - sliderPadding]);
  
 const tickSvg = monthContainer
   .append("svg")
