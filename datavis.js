@@ -164,7 +164,7 @@ const months = d3.range(1, 13);
 
 // width for both the slider and the tick labels
 const sliderWidth = 900;
-
+const sliderPadding = 25;
 // main container for slider + ticks + label
 const monthContainer = d3.select("#month")
   .style("width", sliderWidth + "px")
@@ -197,7 +197,7 @@ const monthNames = months.map(m =>
 
 const sliderScale = d3.scaleLinear()
   .domain([months[0], months[months.length - 1]]) // 1..12
-  .range([0, sliderWidth]);
+  .range([sidePadding, sliderWidth]);
 
 const tickSvg = monthContainer
   .append("svg")
