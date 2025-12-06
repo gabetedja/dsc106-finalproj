@@ -271,7 +271,7 @@ const yAxisG = svg.append("g")
 const yLabel = yAxisG.append("text")
   .attr("transform", "rotate(-90)")
   .attr("x", -height / 2)
-  .attr("y", -40)
+  .attr("y", -80)
   .attr("fill", "black")
   .attr("text-anchor", "middle")
   .text("Surface Temperature (°C)"); // default tas
