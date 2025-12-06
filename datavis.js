@@ -247,7 +247,7 @@ slider.on("input", function () {
 });
 // ---------- SCALES & AXES ----------
 
-const xScale = d3.scaleLinear().domain([-90, 90]).range([0, width]);
+const xScale = d3.scaleLinear().domain([-90, 90]).range([0, width+200]);
 const yScale = d3.scaleLinear().range([height, 0]);
 
 const xAxis = d3.axisBottom(xScale);
