@@ -9,12 +9,23 @@ body {
   accent-color: oklch(76.264% 0.12187 275.411);
 }
 .chart-card {
-  max-width: 1600px;
+  max-width: 1300px;
   margin: 0 auto 4rem auto;
   padding: 24px 32px 32px 32px;
   border-radius: 24px;
   background: radial-gradient(circle at top left, #3c2b7a, #120b25);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+#chart-wrapper {
+  width: 100%;
+  max-width: 1300px;          /* you can bump this up if you want it wider */
+  margin: 0 auto 4rem auto;
+  padding: 24px 32px 40px;
+  border-radius: 32px;
+  background: radial-gradient(ellipse at top, #31306f 0%, #0b0c20 55%, #050612 100%);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(80, 120, 255, 0.3);
 }
 
 /* Dark theme for axes & text inside the card */
