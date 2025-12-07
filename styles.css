@@ -39,7 +39,7 @@ body {
   height: 18px;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.35);
   cursor: pointer;
 }
 .slider::-moz-range-thumb {
@@ -47,7 +47,7 @@ body {
   height: 18px;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.35);
   cursor: pointer;
 }
 
