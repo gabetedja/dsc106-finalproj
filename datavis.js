@@ -341,10 +341,28 @@ function draw(month) {
       })
       .on("mouseleave", () => tooltip.attr("hidden", true)),
     update => update
-      .transition()
-      .duration(500)
-      .attr("cx", d => xScale(d.lat))
-      .attr("cy", d => yScale(d[yVar])),
+      .on("mouseenter", (event, d) => {
+    const fmt = v =>
+      v === undefined || Number.isNaN(v) ? "NA" :
+      Math.abs(v) > 1e3 ? v.toExponential(2) : v.toFixed(3);
+
+    tooltip
+      .style("left", `${event.pageX + 10}px`)
+      .style("top", `${event.pageY}px`)
+      .html(`
+        Lat: ${d.lat}°<br>
+        tas: ${d.tas !== undefined ? d.tas.toFixed(2) : "NA"} °C<br>
+        o3: ${d.o3 !== undefined ? fmt(d.o3) : "NA"}<br>
+        psl: ${d.psl !== undefined ? fmt(d.psl) : "NA"}<br>
+        <i>Currently plotting: ${yVar}</i>
+      `)
+      .attr("hidden", null);
+  })
+  .on("mouseleave", () => tooltip.attr("hidden", true))
+  .transition()
+  .duration(500)
+  .attr("cx", d => xScale(d.lat))
+  .attr("cy", d => yScale(d[yVar])),
     exit => exit.remove()
   );
 }
