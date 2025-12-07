@@ -16,7 +16,7 @@ body {
   background: radial-gradient(circle at top left, #3c2b7a, #120b25);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
-#chart-wrapper {
+.chart-wrapper {
   width: 100%;
   max-width: 1300px;          /* you can bump this up if you want it wider */
   margin: 0 auto 4rem auto;
