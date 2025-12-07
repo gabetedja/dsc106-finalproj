@@ -9,7 +9,7 @@ body {
   accent-color: oklch(76.264% 0.12187 275.411);
 }
 .chart-card {
-  width: 1600px;
+  width: 1250px;
   margin: 0 auto 4rem auto;
   padding: 24px 32px 32px 32px;
   border-radius: 24px;
