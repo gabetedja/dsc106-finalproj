@@ -8,3 +8,56 @@ body {
   margin-inline: auto;
   accent-color: oklch(76.264% 0.12187 275.411);
 }
+.chart-card {
+  max-width: 1200px;
+  margin: 0 auto 4rem auto;
+  padding: 24px 32px 32px 32px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, #3c2b7a, #120b25);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark theme for axes & text inside the card */
+.chart-card text {
+  fill: #e4e5ff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+}
+
+/* Slider glow */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb347, #ff6b81);
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+}
+
+/* Tooltip upgrade */
+#tooltip {
+  background: rgba(12, 9, 30, 0.95);
+  color: #fefeff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
