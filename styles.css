@@ -29,7 +29,6 @@ body {
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  margin-left: -100px;
   height: 6px;
   border-radius: 999px;
   background: linear-gradient(90deg, #ffb347, #ff6b81);
