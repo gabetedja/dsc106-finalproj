@@ -4,6 +4,7 @@ body {
 	   and use the OS’s UI font as the website font
 	 */
   background-image: url('data/digital-art-isolated-house.jpg');
+  background-size: contain;
   font: 100%/1.5 system-ui;
   max-width: 100ch;
   margin-inline: auto;
