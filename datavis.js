@@ -61,105 +61,7 @@ const data = Array.from(mergedMap.values());
 
 // ---------- SLIDER + VARIABLE SELECT ----------
 
-/*const months = [...new Set(data.map(d => d.month))].sort((a, b) => a - b);
-const sliderWidth = 900;
 
-const slider = d3.select("#month")
-  .append("input")
-  .attr("type", "range")
-  .attr("min", d3.min(months))
-  .attr("max", d3.max(months))
-  .attr("step", 1)
-  .attr("value", d3.min(months))
-  .attr("class", "slider")
-  .style("width", sliderWidth + "px")
-  .style("display", "block")
-  .style("margin", "0 auto");
-
-const labelContainer = d3.select("#month")
-  .append("div")
-  .attr("class", "slider-labels")
-  .style("display", "flex")
-  .style("justify-content", "space-between")
-  .style("width", "75%")
-  .style("margin", "0 auto")
-  .style("font-size", "0.9rem");
-
-labelContainer.selectAll("span")
-  .data(months)
-  .join("span")
-  .text(d => new Date(2000, d - 1).toLocaleString("default", { month: "short" }));
-
-const tickList = d3.select("#month")
-  .append("datalist")
-  .attr("id", "monthTicks");
-
-slider.attr("list", "monthTicks");
-
-tickList.selectAll("option")
-  .data(months)
-  .join("option")
-  .attr("value", d => d)
-  .text(d => new Date(2000, d - 1).toLocaleString("default", { month: "short" }));
-
-const label = d3.select("#month")
-  .append("div")
-  .attr("id", "monthLabel")
-  .style("margin-top", "10px")
-  .text(new Date(2000, d3.min(months) - 1).toLocaleString("default", { month: "long" }));*/
-/*const monthNames = months.map(m =>
-  new Date(2000, m - 1).toLocaleString("default", { month: "short" })
-);
-
-// add tick labels under the slider manually
-const sliderScale = d3.scaleLinear()
-  .domain([1, 12])
-  .range([0, sliderWidth]);
-
-const tickSvg = d3.select("#month")
-  .append("svg")
-  .attr("width", sliderWidth)
-  .attr("height", 40);
-
-tickSvg.selectAll("text")
-  .data(monthNames)
-  .join("text")
-  .attr("x", (_, i) => sliderScale(i + 1))
-  .attr("y", 20)
-  .attr("text-anchor", "middle")
-  .attr("font-size", "12px")
-  .attr("fill", "#333")
-  .text(d => d);
-
-// dropdown to switch tas/o3/psl
-let currentVariable = "tas";
-
-const variableSelect = d3.select("#month")
-  .append("select")
-  .attr("id", "variableSelect")
-  .style("margin-top", "10px")
-  .on("change", function () {
-    currentVariable = this.value;
-    const monthValue = +slider.property("value");
-    draw(monthValue);
-  });
-
-variableSelect.selectAll("option")
-  .data([
-    { value: "tas", label: "Surface Temperature (tas)" },
-    { value: "o3", label: "Ozone (o3)" },
-    { value: "psl", label: "Sea Level Pressure (psl)" }
-  ])
-  .join("option")
-  .attr("value", d => d.value)
-  .text(d => d.label);
-
-slider.on("input", function () {
-  const monthValue = +this.value;
-  label.text(new Date(2000, monthValue - 1).toLocaleString("default", { month: "long" }));
-  draw(monthValue);
-});
-*/
 const months = d3.range(1, 13);
 
 // width for both the slider and the tick labels
@@ -285,7 +187,7 @@ function yLabelText(variable) {
 
 // ---------- DRAW FUNCTION ----------
 
-function draw(month) {
+/*function draw(month) {
   const monthData = data.filter(d => d.month === month);
   const yVar = currentVariable;
 
@@ -365,7 +267,78 @@ function draw(month) {
   .attr("cy", d => yScale(d[yVar])),
     exit => exit.remove()
   );
-}
+}*/
+function draw(month) {
+  // All data for this month
+  const monthData = data.filter(d => d.month === month);
 
+  // Use only points that have ALL three variables,
+  // so the lat set is identical for tas, o3, and psl.
+  const base = monthData.filter(d =>
+    d.tas !== undefined && !Number.isNaN(d.tas) &&
+    d.o3  !== undefined && !Number.isNaN(d.o3)  &&
+    d.psl !== undefined && !Number.isNaN(d.psl)
+  );
+
+  // Optionally, keep them sorted by latitude (good for the line)
+  base.sort((a, b) => d3.ascending(a.lat, b.lat));
+
+  const yVar = currentVariable;
+
+  // y scale from the chosen variable, but SAME x points
+  yScale.domain(d3.extent(base, d => d[yVar])).nice();
+  svg.select(".y-axis").transition().duration(500).call(yAxis);
+  yLabel.text(yLabelText(yVar));
+
+  const line = d3.line()
+    .x(d => xScale(d.lat))
+    .y(d => yScale(d[yVar]));
+
+  svg.selectAll(".line")
+    .data([base])
+    .join("path")
+      .attr("class", "line")
+    .transition()
+      .duration(500)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 2)
+      .attr("d", line);
+
+  const circles = svg.selectAll("circle")
+    .data(base, d => d.lat);  // same key, but now same set of lats for all vars
+
+  circles.join(
+    enter => enter.append("circle")
+      .attr("cx", d => xScale(d.lat))
+      .attr("cy", d => yScale(d[yVar]))
+      .attr("r", 4)
+      .attr("fill", "orange")
+      .on("mouseenter", (event, d) => {
+        const fmt = v =>
+          v === undefined || Number.isNaN(v) ? "NA" :
+          Math.abs(v) > 1e3 ? v.toExponential(2) : v.toFixed(3);
+
+        tooltip
+          .style("left", `${event.pageX + 10}px`)
+          .style("top", `${event.pageY}px`)
+          .html(`
+            Lat: ${d.lat}°<br>
+            tas: ${d.tas !== undefined ? d.tas.toFixed(2) : "NA"} °C<br>
+            o3: ${d.o3 !== undefined ? fmt(d.o3) : "NA"}<br>
+            psl: ${d.psl !== undefined ? fmt(d.psl) : "NA"}<br>
+            <i>Currently plotting: ${yVar}</i>
+          `)
+          .attr("hidden", null);
+      })
+      .on("mouseleave", () => tooltip.attr("hidden", true)),
+    update => update
+      .transition()
+      .duration(500)
+      .attr("cx", d => xScale(d.lat))
+      .attr("cy", d => yScale(d[yVar])),
+    exit => exit.remove()
+  );
+}
 // initial draw
 draw(months[0]);
