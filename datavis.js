@@ -325,7 +325,7 @@ function draw(month) {
       .on("mouseenter", (event, d) => {
         const fmt = v =>
           v === undefined || Number.isNaN(v) ? "NA" :
-          Math.abs(v) > 1e3 ? v.toExponential(2) : v.toFixed(3);
+          Math.abs(v) > 1e3 ? v.toExponential(2) : v.toFixed(9);
 
         tooltip
           .style("left", `${event.pageX + 10}px`)
